@@ -78,46 +78,46 @@ header {
     background-color: #cccccc;
 }
 
-.logo {
+header .logo {
     height: 100%;
     width: 25%;
 }
 
-.logo img {
+header .logo img {
     width: 50px;
     height: 50px;
     margin-left: 25px;
     margin-top: 25px;
 }
 
-.navigation {
+header .navigation {
     display: flex;
     width: 55%;
 }
 
-.navigation .main_menu {
+header .navigation .main_menu {
     display: inline-flex;
     list-style: none;
     font-weight: bold;
     margin: auto 0;
 }
 
-.navigation .main_menu li {
+header .navigation .main_menu li {
     margin-left: 25px;
     color: #444444;
     font-size: 18px;
 }
 
-.navigation .main_menu li:first-child {
+header .navigation .main_menu li:first-child {
     margin-left: 0;
 }
 
-.navigation .main_menu li a {
+header .navigation .main_menu li a {
     color: #777777;
     text-decoration: none;
 }
 
-.navigation .main_menu li a:hover {
+header .navigation .main_menu li a:hover {
     color: #444444;
 }
 
@@ -157,6 +157,5 @@ footer {
 /* page_content */
 
 .page_content {
-    margin-top: auto;
     flex-grow: 1;
 }
