@@ -1,7 +1,7 @@
 <?php
 function checkAuth(): void
 {
-    if (empty($_COOKIE['userAuthToken'])) {
+    if (empty($_COOKIE[USER_AUTH_COOKIE_NAME])) {
         header('Location: /auth.php');
         die;
     }

@@ -41,7 +41,7 @@ $arMenu     = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
     <div class="auth">
         <div>
             <span class="user_name">Александр</span>
-            <a href="logout"><span>Выйти</span></a>
+            <a href="/logout.php"><span>Выйти</span></a>
         </div>
     </div>
 </header>
