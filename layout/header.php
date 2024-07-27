@@ -1,3 +1,7 @@
+<?php
+$currentUri = $_SERVER["REQUEST_URI"];
+$arMenu     = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,23 +13,27 @@
 <body>
 <header>
     <div class="logo">
+        <? if ($currentUri !== '/') { ?>
+            <a href="/">
+        <? } ?>
         <img src="/images/logo.png">
+        <? if ($currentUri !== '/') { ?>
+            </a>
+        <? } ?>
     </div>
     <div class="navigation">
         <ul class="main_menu">
-            <li>
-                Главная
-            </li>
-            <li>
-                <a href="users.html">
-                    Пользователи
-                </a>
-            </li>
-            <li>
-                <a href="counter.html">
-                    Счетчик
-                </a>
-            </li>
+            <? foreach ($arMenu as $menuItem) { ?>
+                <li>
+                <? if ($currentUri !== $menuItem['uri']) { ?>
+                    <a href="<?= $menuItem['uri'] ?>">
+                <? }
+                     echo $menuItem['title'];
+                if ($currentUri !== $menuItem['uri']) { ?>
+                    </a>
+                <? } ?>
+                </li>
+            <? } ?>
         </ul>
     </div>
     <div class="auth">
