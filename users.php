@@ -1,4 +1,5 @@
 <?php
+const NEED_AUTH = true;
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
 ?>
     <div class="page_content users_page">

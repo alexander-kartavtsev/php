@@ -1,6 +1,6 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/app/functions.php';
-checkAuth();
+require $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
+
 $currentUri = $_SERVER["REQUEST_URI"];
 $arMenu     = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
 ?>
