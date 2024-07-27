@@ -2,7 +2,7 @@
 function checkAuth(): void
 {
     $token = $_COOKIE[USER_AUTH_COOKIE_NAME] ?? '';
-    if (empty($token) || !getUserIdByToken($token)) {
+    if (empty($token) || !getUserIdByToken()) {
         header('Location: /auth.php');
         die;
     }
@@ -36,8 +36,13 @@ function getUserAuthToken(array $user): string
     return $token;
 }
 
-function getUserIdByToken(string $token): ?int
+function getUserIdByToken(): ?int
 {
+    $token = $_COOKIE[USER_AUTH_COOKIE_NAME] ?? '';
+    if (empty($token)) {
+        return null;
+    }
+
     global $pdo;
 
     $query = $pdo->prepare('SELECT `USER_ID` FROM user_auth WHERE `TOKEN` = :token');
@@ -57,4 +62,9 @@ function logout(): void
     $query->execute(['token' => $_COOKIE[USER_AUTH_COOKIE_NAME]]);
 
     setcookie(USER_AUTH_COOKIE_NAME, 0, time() - 1);
+}
+
+function autoloader($class): void
+{
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/app/classes/"  . $class . ".php";
 }

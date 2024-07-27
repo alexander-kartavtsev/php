@@ -1,6 +1,7 @@
 <?php
 const NEED_AUTH = true;
 require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
+$user = new CurrentUser();
 ?>
 <div class="page_content main_page">
     <h1>Страница пользователя login</h1>
