@@ -1,4 +1,10 @@
 <?php
+
+if (empty($_COOKIE['userAuthToken'])) {
+    header('Location: /auth.php');
+    die;
+}
+
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
 ?>
 <div class="page_content counter_page">
