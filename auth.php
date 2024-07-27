@@ -6,7 +6,7 @@ if (!empty($_POST)) {
     $login        = $_POST['login'];
     $password     = $_POST['password'];
 
-    $query = $pdo->prepare('SELECT `ID`, `PASSWORD` FROM users WHERE `LOGIN` = :login');
+    $query = $pdo->prepare('SELECT `ID`, `LOGIN`, `PASSWORD` FROM users WHERE `LOGIN` = :login');
     $query->execute(['login' => $login]);
     $user = $query->fetch();
     if (empty($user)) {
@@ -14,7 +14,7 @@ if (!empty($_POST)) {
     } else {
         $userAuthOk = password_verify($password, $user['PASSWORD']);
         if ($userAuthOk) {
-            setcookie(USER_AUTH_COOKIE_NAME, $user['ID'], time() + USER_AUTH_SESSION_TIME);
+            setcookie(USER_AUTH_COOKIE_NAME, getUserAuthToken($user), time() + USER_AUTH_SESSION_TIME);
             $locationUrl = $_COOKIE['HTTP_REFERER'] ?? '/';
             header('Location: ' . $locationUrl);
             die;

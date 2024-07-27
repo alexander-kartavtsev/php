@@ -23,3 +23,16 @@ COLLATE='utf8_unicode_ci';
 SQL;
 
 $pdo->exec($sql);
+
+$sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `user_auth` (
+    `ID` INT(11) NOT NULL AUTO_INCREMENT,
+    `USER_ID` INT(11) NOT NULL,
+    `TOKEN` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`ID`) USING BTREE,
+    FOREIGN KEY (`USER_ID`) REFERENCES `users`(`ID`) ON DELETE CASCADE
+)
+COLLATE='utf8_unicode_ci';
+SQL;
+
+$pdo->exec($sql);
