@@ -1,17 +1,43 @@
 <?php
 const NEED_AUTH = true;
-require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/app/init.php";
 $user = new CurrentUser();
+/**
+ * @var PDO $pdo
+ */
+$errors = [];
+if (!empty($_POST)) {
+    $name  = $_POST['name'] == 'noname' ? '' : $_POST['name'];
+
+    $query  = $pdo->prepare('UPDATE users SET `NAME` = :name WHERE `ID` = :id');
+    $result = $query->execute([
+        'name'  => $name,
+        'id'    => $user->getId(),
+    ]);
+
+    if ($result) {
+        header('Location: /');
+        die;
+    } else {
+        $errors["query"] = $query->errorInfo();
+    }
+}
+require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
 ?>
 <div class="page_content main_page">
-    <h1>Страница пользователя login</h1>
+    <h1>Страница пользователя <?= $user->getLogin() ?></h1>
     <div class="main_wrapper">
         <div class="form_main">
             <div class="main_data">
-                <form method="post" action="main.html">
+                <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
                     <h2>Основные данные</h2>
                     <div class="label"><label for="name">Имя</label></div>
-                    <input name="name" type="text" placeholder="Имя пользователя" value="Александр">
+                    <input
+                            name="name"
+                            type="text"
+                            placeholder="Имя пользователя"
+                            value="<?= $user->getName() ?: 'noname' ?>"
+                    >
                     <div class="label"><label for="password">Пароль</label></div>
                     <input name="password" type="password" placeholder="Введите пароль">
                     <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
@@ -27,7 +53,7 @@ $user = new CurrentUser();
                     </div>
                     <input name="photo" type="file" class="photo_upload" id="photo_upload">
                     <span class="photo_link" id="photo_link">Файл не выбран</span>
-                    <button class="auth_btn" type="button">Сохранить</button>
+                    <button class="auth_btn" type="submit">Сохранить</button>
                 </form>
             </div>
             <div class="additional_data">

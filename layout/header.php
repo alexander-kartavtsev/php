@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
 
 $currentUri = $_SERVER["REQUEST_URI"];
 $arMenu     = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
