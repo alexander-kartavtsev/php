@@ -5,6 +5,8 @@ class CurrentUser
     private int    $id;
     private string $login;
     private string $name;
+    private string $photo;
+    private bool   $isSelectedPhoto = false;
 
     public function __construct()
     {
@@ -26,6 +28,44 @@ class CurrentUser
         return $this->name;
     }
 
+    public function getPhotoSrc(): string
+    {
+        return '/images/users/' . $this->id . '/' . $this->photo;
+    }
+
+    public function isSelectedPhoto(): bool
+    {
+        return $this->isSelectedPhoto;
+    }
+
+    public function getPhotoList(): array
+    {
+        $list = [];
+        $dir  = $_SERVER['DOCUMENT_ROOT'] . '/images/users/' . $this->id . '/';
+        if (!is_dir($dir)) {
+            umask(0);
+            mkdir($dir, 0777, true);
+        }
+        $files = scandir($dir);
+        if (!$files) {
+            return [];
+        }
+        foreach ($files as $key => $item) {
+            if (in_array($item, ['.', '..'])) {
+                unset($files[$key]);
+                continue;
+            }
+            if ($item === $this->photo) {
+                $this->isSelectedPhoto = true;
+            }
+            $list[] = [
+                'name'    => $item,
+                'selected' => $item === $this->photo,
+            ];
+        }
+        return $list;
+    }
+
     private function init(): void
     {
         global $pdo;
@@ -33,7 +73,8 @@ class CurrentUser
         $sql = <<<SQL
 SELECT `ID` AS `id`, 
        `NAME` AS `name`, 
-       `LOGIN` AS `login`
+       `LOGIN` AS `login`,
+       `PHOTO` AS `photo`
 FROM users WHERE `ID` = :id
 SQL;
 
@@ -44,5 +85,6 @@ SQL;
         $this->id    = $user->id;
         $this->login = $user->login;
         $this->name  = (string)$user->name ?: "noname";
+        $this->photo = (string)$user->photo;
     }
 }

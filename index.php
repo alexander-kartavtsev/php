@@ -8,10 +8,12 @@ $user = new CurrentUser();
 $errors = [];
 if (!empty($_POST)) {
     $name  = $_POST['name'] == 'noname' ? '' : $_POST['name'];
+    $photo = $_POST['photo'];
 
-    $query  = $pdo->prepare('UPDATE users SET `NAME` = :name WHERE `ID` = :id');
+    $query  = $pdo->prepare('UPDATE users SET `NAME` = :name, `PHOTO` = :photo WHERE `ID` = :id');
     $result = $query->execute([
         'name'  => $name,
+        'photo' => $photo,
         'id'    => $user->getId(),
     ]);
 
@@ -42,17 +44,18 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
                     <input name="password" type="password" placeholder="Введите пароль">
                     <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
                     <input name="password_confirm" type="password" placeholder="Повторите пароль">
-                    <div class="label">
-                        <label
-                            for="photo"
-                            class="custom_photo_upload"
-                            id="custom_photo_upload"
-                        >
-                            Добавить фото
-                        </label>
-                    </div>
-                    <input name="photo" type="file" class="photo_upload" id="photo_upload">
-                    <span class="photo_link" id="photo_link">Файл не выбран</span>
+                    <select name="photo">
+                        <option value="" <?= $user->isSelectedPhoto() ? '' : 'selected' ?>>Выберите фото</option>
+                        <?php
+                        if ($user->getPhotoList()) {
+                            foreach ($user->getPhotoList() as $photo) { ?>
+                                <option value="<?= $photo['name'] ?>" <?= $photo['selected'] ? 'selected' : ''?>>
+                                    <?= $photo['name'] ?>
+                                </option>
+                                <?php
+                            }
+                        } ?>
+                    </select>
                     <button class="auth_btn" type="submit">Сохранить</button>
                 </form>
             </div>
@@ -103,8 +106,30 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
             </div>
         </div>
         <div class="main_image">
-            <img src="images/person14-1024.png">
-            <!--                    <img src="images/not_foto.png">-->
+            <?php
+            if ($user->isSelectedPhoto()) { ?>
+                <img src="<?=$user->getPhotoSrc()?>">
+            <?php
+            } else { ?>
+                <img src="images/person14-1024.png">
+                <!--                    <img src="images/not_foto.png">-->
+            <?php
+            } ?>
+            <form method="post" action="<?= '/app/helper/uploadPhoto.php' ?>" enctype="multipart/form-data">
+                <input type="hidden" name="user_id" value="<?= $user->getId() ?>">
+                <div class="label">
+                    <label
+                            for="photo"
+                            class="custom_photo_upload"
+                            id="custom_photo_upload"
+                    >
+                        Загрузить фото
+                    </label>
+                </div>
+                <input name="photo" type="file" class="photo_upload" id="photo_upload">
+                <span class="photo_link" id="photo_link">Файл не выбран</span>
+                <button type="submit">Загрузить</button>
+            </form>
         </div>
     </div>
 </div>
