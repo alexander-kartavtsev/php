@@ -1,8 +1,10 @@
 <?php
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
 
-$currentUri = $_SERVER["REQUEST_URI"];
-$arMenu     = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
+$currentUri  = $_SERVER["REQUEST_URI"];
+$currentUser = new CurrentUser();
+$arMenu      = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,32 +17,41 @@ $arMenu     = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
 <body>
 <header>
     <div class="logo">
-        <? if ($currentUri !== '/') { ?>
-            <a href="/">
-        <? } ?>
-        <img src="/images/logo.png">
-        <? if ($currentUri !== '/') { ?>
-            </a>
-        <? } ?>
+        <?php
+        if ($currentUri !== '/') { ?>
+        <a href="/">
+            <?php
+            } ?>
+            <img src="/images/logo.png">
+            <?php
+            if ($currentUri !== '/') { ?>
+        </a>
+    <?php
+    } ?>
     </div>
     <div class="navigation">
         <ul class="main_menu">
-            <? foreach ($arMenu as $menuItem) { ?>
+            <?php
+            foreach ($arMenu as $menuItem) { ?>
                 <li>
-                <? if ($currentUri !== $menuItem['uri']) { ?>
+                    <?php
+                    if ($currentUri !== $menuItem['uri']) { ?>
                     <a href="<?= $menuItem['uri'] ?>">
-                <? }
-                     echo $menuItem['title'];
-                if ($currentUri !== $menuItem['uri']) { ?>
+                        <?php
+                        }
+                        echo $menuItem['title'];
+                        if ($currentUri !== $menuItem['uri']) { ?>
                     </a>
-                <? } ?>
+                <?php
+                } ?>
                 </li>
-            <? } ?>
+                <?php
+            } ?>
         </ul>
     </div>
     <div class="auth">
         <div>
-            <span class="user_name">Александр</span>
+            <span class="user_name"><?= $currentUser->getName() ?></span>
             <a href="/logout.php"><span>Выйти</span></a>
         </div>
     </div>

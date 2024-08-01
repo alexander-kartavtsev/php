@@ -43,6 +43,6 @@ SQL;
 
         $this->id    = $user->id;
         $this->login = $user->login;
-        $this->name  = (string)$user->name;
+        $this->name  = (string)$user->name ?: "noname";
     }
 }
