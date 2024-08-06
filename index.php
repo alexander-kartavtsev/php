@@ -44,6 +44,7 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
                     <input name="password" type="password" placeholder="Введите пароль">
                     <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
                     <input name="password_confirm" type="password" placeholder="Повторите пароль">
+                    <div class="label"><label for="photo">Фото</label></div>
                     <select name="photo">
                         <option value="" <?= $user->isSelectedPhoto() ? '' : 'selected' ?>>Выберите фото</option>
                         <?php
@@ -128,7 +129,7 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
                 </div>
                 <input name="photo" type="file" class="photo_upload" id="photo_upload">
                 <span class="photo_link" id="photo_link">Файл не выбран</span>
-                <button type="submit">Загрузить</button>
+                <button type="submit" class="photo_upload_btn btn">Загрузить</button>
             </form>
         </div>
     </div>

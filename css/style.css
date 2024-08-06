@@ -13,6 +13,14 @@ button {
     font-family: inherit;
 }
 
+.btn {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+
+
 /* auth */
 
 .form_auth {
@@ -176,6 +184,7 @@ footer {
 
 .main_page .main_wrapper {
     display: inline-flex;
+    width: 100%;
 }
 
 .main_page .form_main {
@@ -203,7 +212,8 @@ footer {
 }
 
 .main_page .form_main .main_data .label,
-.main_page .form_main .main_data input {
+.main_page .form_main .main_data input,
+.main_page .form_main .main_data select {
     display: block;
     width: 80%;
     margin: 0 auto;
@@ -213,16 +223,17 @@ footer {
     margin-bottom: 5px;
 }
 
-.main_page .form_main .main_data input {
+.main_page .form_main .main_data input,
+.main_page .form_main .main_data select {
     margin-bottom: 15px;
     height: 25px;
 }
 
-.main_page .form_main .main_data input.photo_upload {
+.main_page input.photo_upload {
     display: none;
 }
 
-.main_page .form_main .main_data label.custom_photo_upload {
+.main_page label.custom_photo_upload {
     display: block;
     text-align: center;
     cursor: pointer;
@@ -231,11 +242,11 @@ footer {
     margin-bottom: 5px;
 }
 
-.main_page .form_main .main_data label.custom_photo_upload:hover {
+.main_page label.custom_photo_upload:hover {
     color: #777777;
 }
 
-.main_page .form_main .main_data .photo_link {
+.main_page .photo_link {
     display: block;
     text-align: center;
     font-style: italic;
