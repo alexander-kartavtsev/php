@@ -5,6 +5,7 @@ class CurrentUser
     private int    $id;
     private string $login;
     private string $name;
+    private array  $data;
     private string $photo;
     private bool   $isSelectedPhoto = false;
 
@@ -26,6 +27,11 @@ class CurrentUser
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
     }
 
     public function getPhotoSrc(): string
@@ -59,7 +65,7 @@ class CurrentUser
                 $this->isSelectedPhoto = true;
             }
             $list[] = [
-                'name'    => $item,
+                'name'     => $item,
                 'selected' => $item === $this->photo,
             ];
         }
@@ -73,6 +79,7 @@ class CurrentUser
         $sql = <<<SQL
 SELECT `ID` AS `id`, 
        `NAME` AS `name`, 
+       `DATA` AS `data`, 
        `LOGIN` AS `login`,
        `PHOTO` AS `photo`
 FROM users WHERE `ID` = :id
@@ -85,6 +92,7 @@ SQL;
         $this->id    = $user->id;
         $this->login = $user->login;
         $this->name  = (string)$user->name ?: "noname";
+        $this->data  = json_decode($user->data ?? '[]', true);
         $this->photo = (string)$user->photo;
     }
 }

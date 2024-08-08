@@ -1,4 +1,5 @@
 <?php
+
 const NEED_AUTH = true;
 require_once $_SERVER['DOCUMENT_ROOT'] . "/app/init.php";
 $user = new CurrentUser();
@@ -39,18 +40,19 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
                             type="text"
                             placeholder="Имя пользователя"
                             value="<?= $user->getName() ?: 'noname' ?>"
+                            autocomplete="username"
                     >
                     <div class="label"><label for="password">Пароль</label></div>
-                    <input name="password" type="password" placeholder="Введите пароль">
+                    <input name="password" type="password" placeholder="Введите пароль" autocomplete="current-password">
                     <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
-                    <input name="password_confirm" type="password" placeholder="Повторите пароль">
+                    <input name="password_confirm" type="password" placeholder="Повторите пароль" autocomplete="off">
                     <div class="label"><label for="photo">Фото</label></div>
                     <select name="photo">
                         <option value="" <?= $user->isSelectedPhoto() ? '' : 'selected' ?>>Выберите фото</option>
                         <?php
                         if ($user->getPhotoList()) {
                             foreach ($user->getPhotoList() as $photo) { ?>
-                                <option value="<?= $photo['name'] ?>" <?= $photo['selected'] ? 'selected' : ''?>>
+                                <option value="<?= $photo['name'] ?>" <?= $photo['selected'] ? 'selected' : '' ?>>
                                     <?= $photo['name'] ?>
                                 </option>
                                 <?php
@@ -62,29 +64,20 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
             </div>
             <div class="additional_data">
                 <h2>Дополнительные данные</h2>
-                <table class="tbl">
-                    <tr>
+                <table class="tbl" id="table_add_data">
+                    <?php foreach ($user->getData() as $key => $dataItem) { ?>
+                    <tr id="additional_data_row_<?= $key ?>">
                         <td>
-                            Телефон
+                            <?= $dataItem['name']?>
                         </td>
                         <td>
-                            +79281252141
+                            <?= $dataItem['value']?>
                         </td>
                         <td>
-                            <span id="additional_data_1" class="additional_data_delete">Удалить</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Дата рождения
-                        </td>
-                        <td>
-                            29.07.1974
-                        </td>
-                        <td>
-                            <span  id="additional_data_2" class="additional_data_delete">Удалить</span>
+                            <span id="delete_add_data_<?= $key ?>" class="additional_data_delete">Удалить</span>
                         </td>
                     </tr>
+                    <?php } ?>
                 </table>
                 <table class="add">
                     <tr>
@@ -94,13 +87,13 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
                     </tr>
                     <tr>
                         <td>
-                            <input name="field_name" type="text">
+                            <input name="field_name" type="text" id="add_field_name">
                         </td>
                         <td>
-                            <input name="field_value" type="text">
+                            <input name="field_value" type="text" id="add_field_value">
                         </td>
                         <td>
-                            <button class="additional_data_btn">Добавить</button>
+                            <button class="additional_data_btn" id="add_btn">Добавить</button>
                         </td>
                     </tr>
                 </table>
@@ -109,12 +102,12 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
         <div class="main_image">
             <?php
             if ($user->isSelectedPhoto()) { ?>
-                <img src="<?=$user->getPhotoSrc()?>">
-            <?php
+                <img src="<?= $user->getPhotoSrc() ?>">
+                <?php
             } else { ?>
                 <img src="images/person14-1024.png">
                 <!--                    <img src="images/not_foto.png">-->
-            <?php
+                <?php
             } ?>
             <form method="post" action="<?= '/app/helper/uploadPhoto.php' ?>" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="<?= $user->getId() ?>">
@@ -137,16 +130,41 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
 <script>
     const fileInput = document.getElementById('photo_upload');
     const fileLabel = document.getElementById('custom_photo_upload');
-    const fileLink  = document.getElementById('photo_link');
+    const fileLink = document.getElementById('photo_link');
 
     fileLabel.onclick = function () {
         fileInput.click();
     };
 
     fileInput.onchange = function () {
-        console.log(fileInput.files);
         fileLink.textContent = fileInput.files.length ? fileInput.files[0].name : 'Файл не выбран';
         fileLabel.textContent = (fileInput.files.length ? 'Изменить' : 'Добавить') + ' фото';
+    }
+
+    const additionalDataName = document.getElementById("add_field_name");
+    const additionalDataValue = document.getElementById("add_field_value");
+    const additionalDataButtonAdd = document.getElementById("add_btn");
+
+    additionalDataButtonAdd.onclick = function () {
+        const data = {
+            'name': additionalDataName.value,
+            'value': additionalDataValue.value,
+            'user_id': <?=$user->getId()?>
+        };
+        ajax('/app/ajax/addAdditionalData.php', data);
+    }
+
+    async function ajax(url, data) {
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(data)
+        });
+
+        let result = await response.json();
+        console.log(result);
     }
 </script>
 <?php
