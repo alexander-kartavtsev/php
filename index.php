@@ -74,7 +74,7 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
                             <?= $dataItem['value']?>
                         </td>
                         <td>
-                            <span id="delete_add_data_<?= $key ?>" class="additional_data_delete">Удалить</span>
+                            <span id="delete_<?= $key ?>" class="additional_data_delete">Удалить</span>
                         </td>
                     </tr>
                     <?php } ?>
@@ -144,6 +144,8 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
     const additionalDataName = document.getElementById("add_field_name");
     const additionalDataValue = document.getElementById("add_field_value");
     const additionalDataButtonAdd = document.getElementById("add_btn");
+    const tableAddData = document.getElementById("table_add_data");
+    // const additionalDataButtonDelete = document.getElementsByClassName("additional_data_delete");
 
     additionalDataButtonAdd.onclick = function () {
         const data = {
@@ -152,6 +154,20 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
             'user_id': <?=$user->getId()?>
         };
         ajax('/app/ajax/addAdditionalData.php', data);
+    }
+
+    tableAddData.onclick = function (event) {
+        let btn_del = event.target.closest('td>span.additional_data_delete');
+        if (!btn_del) return;
+        if (!tableAddData.contains(btn_del)) return;
+
+        const btn_id = event.target.id;
+        const id = btn_id.substring(btn_id.indexOf('_') + 1);
+        const data = {
+            'id': id,
+            'user_id': <?=$user->getId()?>
+        };
+        ajax('/app/ajax/delAdditionalData.php', data);
     }
 
     async function ajax(url, data) {
