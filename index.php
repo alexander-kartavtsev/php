@@ -171,7 +171,10 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
             'id': id,
             'user_id': <?=$user->getId()?>
         };
-        ajax('/app/ajax/delAdditionalData.php', data);
+        ajax('/app/ajax/delAdditionalData.php', data, function (result) {
+            const row = document.getElementById('additional_data_row_' + id);
+            row.remove();
+        });
     }
 
     async function ajax(url, data, fn = null) {
