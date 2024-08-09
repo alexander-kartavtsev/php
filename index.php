@@ -153,7 +153,11 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
             'value': additionalDataValue.value,
             'user_id': <?=$user->getId()?>
         };
-        ajax('/app/ajax/addAdditionalData.php', data);
+        ajax('/app/ajax/addAdditionalData.php', data, function (result) {
+            tableAddData.appendChild(getTableRow(result.data.length - 1, data['name'], data['value']));
+            additionalDataName.value = '';
+            additionalDataValue.value = '';
+        });
     }
 
     tableAddData.onclick = function (event) {
@@ -170,7 +174,7 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
         ajax('/app/ajax/delAdditionalData.php', data);
     }
 
-    async function ajax(url, data) {
+    async function ajax(url, data, fn = null) {
         let response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -180,7 +184,29 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
         });
 
         let result = await response.json();
-        console.log(result);
+        if (result.success && fn) {
+            fn(result);
+        }
+    }
+
+    function getTableRow(id, name, value) {
+        const tableRow = document.createElement('tr');
+        tableRow.id = 'additional_data_row_' + id;
+        const tableColumnOne = document.createElement('td');
+        const tableColumnTwo = document.createElement('td');
+        const tableColumnThree = document.createElement('td');
+        tableColumnOne.innerText = name;
+        tableRow.appendChild(tableColumnOne);
+        tableColumnTwo.innerText = value;
+        tableRow.appendChild(tableColumnTwo);
+        const span = document.createElement('span');
+        span.classList.add('additional_data_delete');
+        span.id = 'delete_' + id;
+        span.innerText = 'Удалить';
+        tableColumnThree.appendChild(span);
+        tableRow.appendChild(tableColumnThree);
+
+        return tableRow;
     }
 </script>
 <?php

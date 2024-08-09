@@ -43,11 +43,12 @@ $result = $querySet->execute([
 ]);
 
 if ($result) {
-    $data['success'] = true;
+    $response['success'] = true;
+    $response['data'] = $data;
 } else {
-    $data['success'] = false;
-    $data['errors'][] = 'Не удалось удалить данные';
+    $response['success'] = false;
+    $response['errors'][] = 'Не удалось удалить данные';
 }
 
 
-echo json_encode($data);
+echo json_encode($response);
