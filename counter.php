@@ -14,8 +14,8 @@ require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
           <div class="counter_number">
             <span>15</span>
             <div class="buttons">
-              <button class="plus">+</button>
               <button class="minus">-</button>
+              <button class="plus">+</button>
             </div>
           </div>
         </div>
