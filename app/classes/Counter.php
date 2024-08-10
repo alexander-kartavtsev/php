@@ -22,6 +22,15 @@ class Counter
         return $this->number;
     }
 
+    public function saveNumber(int $number): bool
+    {
+        global $pdo;
+
+        $sql = 'INSERT INTO counters (USER_ID, NUMBER) VALUES (:id, :number) ON DUPLICATE KEY UPDATE NUMBER = :number;';
+        $query = $pdo->prepare($sql);
+        return $query->execute(['id' => $this->user->getId(), 'number' => $number]);
+    }
+
     private function init(): void
     {
         global $pdo;

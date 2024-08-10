@@ -13,14 +13,15 @@ $couner = new Counter();
         <div class="counter_custom">
           <h2>Просто число</h2>
           <div class="counter_number">
-            <span><?= $couner->getNumber() ?></span>
+            <span id="number"><?= $couner->getNumber() ?></span>
             <div class="buttons">
-              <button class="minus">-</button>
-              <button class="plus">+</button>
+              <button class="minus" id="btn-minus">-</button>
+              <button class="plus" id="btn-plus">+</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+<script src="/js/pages/counters.js"></script>
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php';
