@@ -3,25 +3,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
 /** @var PDO $pdo */
 $errors = [];
 if (!empty($_POST)) {
-    $login        = $_POST['login'];
-    $password     = $_POST['password'];
+    $login        = $_POST['login'] ?? '';
+    $password     = $_POST['password'] ?? '';
 
-    $query = $pdo->prepare('SELECT `ID`, `LOGIN`, `PASSWORD` FROM users WHERE `LOGIN` = :login');
-    $query->execute(['login' => $login]);
-    $user = $query->fetch();
-    if (empty($user)) {
-        $errors["exist"] = 'Пользователя с таким логином не существует';
-    } else {
-        $userAuthOk = password_verify($password, $user['PASSWORD']);
-        if ($userAuthOk) {
-            setcookie(USER_AUTH_COOKIE_NAME, getUserAuthToken($user), time() + USER_AUTH_SESSION_TIME);
-            $locationUrl = $_COOKIE['HTTP_REFERER'] ?? '/';
-            header('Location: ' . $locationUrl);
-            die;
-        } else {
-            $errors[] = 'Неправильный пароль';
-        }
-    }
+    $errors = auth($login, $password);
 }
 ?>
 <!DOCTYPE html>
@@ -42,7 +27,7 @@ if (!empty($_POST)) {
                 <button class="auth_btn" type="submit">Войти</button>
             </form>
             <a class="link_reg" href="/registration.php">Зарегистрироваться</a>
-            <? if (!empty($errors)) {
+            <?php if (!empty($errors)) {
                 foreach ($errors as $error) {
                     dump($error);
                 }

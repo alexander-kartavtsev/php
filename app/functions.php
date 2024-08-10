@@ -54,6 +54,43 @@ function getUserIdByToken(): ?int
     return $data['USER_ID'];
 }
 
+function auth(string $login, string $password): array|null
+{
+    global $pdo;
+
+    $errors = [];
+
+    if (empty($login)) {
+        $errors[] = 'Не заполнено обязательное поле login!';
+    }
+    if (empty($password)) {
+        $errors[] = 'Не заполнено обязательное поле password!';
+    }
+
+    if (!empty($errors)) {
+        return $errors;
+    }
+
+    $query = $pdo->prepare('SELECT `ID`, `LOGIN`, `PASSWORD` FROM users WHERE `LOGIN` = :login');
+    $query->execute(['login' => $login]);
+    $user = $query->fetch();
+    if (empty($user)) {
+        $errors["exist"] = 'Пользователя с таким логином не существует';
+    } else {
+        $userAuthOk = password_verify($password, $user['PASSWORD']);
+        if ($userAuthOk) {
+            setcookie(USER_AUTH_COOKIE_NAME, getUserAuthToken($user), time() + USER_AUTH_SESSION_TIME);
+            $locationUrl = $_COOKIE['HTTP_REFERER'] ?? '/';
+            updateVisitsCounter($user['ID'], $pdo);
+            header('Location: ' . $locationUrl);
+            die;
+        } else {
+            $errors[] = 'Неправильный пароль';
+        }
+    }
+    return $errors;
+}
+
 function logout(): void
 {
     global $pdo;
@@ -67,4 +104,11 @@ function logout(): void
 function autoloader($class): void
 {
     require_once $_SERVER['DOCUMENT_ROOT'] . "/app/classes/"  . $class . ".php";
+}
+
+function updateVisitsCounter($userId, $pdo)
+{
+    $sql = 'INSERT INTO counters (USER_ID, VISITS) VALUES (:user_id, 1) ON DUPLICATE KEY UPDATE VISITS = VISITS + 1;';
+    $query = $pdo->prepare($sql);
+    $query->execute(['user_id' => $userId]);
 }
