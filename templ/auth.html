@@ -9,10 +9,16 @@
     <body>
         <div class="form_auth">
             <form action="auth.html" method="post">
-                <label for="login">Логин</label>
-                <input name="login" type="text" placeholder="Введите логин">
-                <label for="password">Пароль</label>
-                <input name="password" type="password" placeholder="Введите пароль">
+                <div class="form-item">
+                    <label for="login" class="require-field">Логин</label>
+                    <input name="login" type="text" placeholder="Введите логин">
+                    <div class="error-message">Не заполнено обязательное поле login!</div>
+                </div>
+                <div class="form-item">
+                    <label for="password" class="require-field">Пароль</label>
+                    <input name="password" type="password" placeholder="Введите пароль">
+                    <div class="error-message"></div>
+                </div>
                 <button class="auth_btn" type="button">Войти</button>
             </form>
             <a class="link_reg" href="registration.html">Зарегистрироваться</a>

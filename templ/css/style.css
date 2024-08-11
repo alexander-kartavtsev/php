@@ -13,7 +13,14 @@ button {
     font-family: inherit;
 }
 
+.btn {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+}
+
 /* auth */
+/* registration */
 
 .form_auth {
     width: 30%;
@@ -37,9 +44,14 @@ button {
 }
 
 .form_auth input {
-    margin: 0 auto 0.8rem auto;
+    margin: 0 auto;
     font-size: 14px;
     line-height: 18px;
+}
+
+.form_auth .form-item {
+    margin: 0 auto 0.8rem auto;
+    height: 70px;
 }
 
 .form_auth label,
@@ -71,6 +83,24 @@ button {
     color: #a7aaa9;
     font-weight: bold;
     text-decoration: none;
+}
+
+label.require-field::after {
+    content: '*';
+    font-size: small;
+    color: #f69090;
+}
+
+.input-error {
+    border: 1px solid #f69090;
+}
+
+.form_auth .error-message {
+    display: block;
+    margin: 0 auto;
+    width: 90%;
+    font-size: x-small;
+    color: #f69090;
 }
 
 /* Header */
@@ -176,6 +206,7 @@ footer {
 
 .main_page .main_wrapper {
     display: inline-flex;
+    width: 100%;
 }
 
 .main_page .form_main {
@@ -203,7 +234,8 @@ footer {
 }
 
 .main_page .form_main .main_data .label,
-.main_page .form_main .main_data input {
+.main_page .form_main .main_data input,
+.main_page .form_main .main_data select {
     display: block;
     width: 80%;
     margin: 0 auto;
@@ -213,16 +245,17 @@ footer {
     margin-bottom: 5px;
 }
 
-.main_page .form_main .main_data input {
+.main_page .form_main .main_data input,
+.main_page .form_main .main_data select {
     margin-bottom: 15px;
     height: 25px;
 }
 
-.main_page .form_main .main_data input.photo_upload {
+.main_page input.photo_upload {
     display: none;
 }
 
-.main_page .form_main .main_data label.custom_photo_upload {
+.main_page label.custom_photo_upload {
     display: block;
     text-align: center;
     cursor: pointer;
@@ -231,11 +264,11 @@ footer {
     margin-bottom: 5px;
 }
 
-.main_page .form_main .main_data label.custom_photo_upload:hover {
+.main_page label.custom_photo_upload:hover {
     color: #777777;
 }
 
-.main_page .form_main .main_data .photo_link {
+.main_page .photo_link {
     display: block;
     text-align: center;
     font-style: italic;
@@ -350,7 +383,7 @@ footer {
     font-weight: bolder;
 }
 
-.counter_page .counter_custom .buttons .plus {
+.counter_page .counter_custom .buttons .minus {
     margin-right: 15px;
 }
 

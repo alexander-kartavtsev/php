@@ -9,14 +9,26 @@
     <body>
         <div class="form_auth">
             <form action="registration.html" method="post">
-                <label for="name">Имя</label>
-                <input name="name" type="text" placeholder="Введите имя">
-                <label for="login">Логин</label>
-                <input name="login" type="text" placeholder="Введите логин">
-                <label for="password">Пароль</label>
-                <input name="password" type="password" placeholder="Введите пароль">
-                <label for="password_confirm">Подтвердите пароль</label>
-                <input name="password_confirm" type="password" placeholder="Повторите пароль">
+                <div class="form-item">
+                    <label for="name">Имя</label>
+                    <input name="name" type="text" placeholder="Введите имя">
+                    <div class="error-message"></div>
+                </div>
+                <div class="form-item">
+                    <label for="login" class="require-field">Логин</label>
+                    <input name="login" type="text" placeholder="Введите логин">
+                    <div class="error-message">Не заполнено обязательное поле login!</div>
+                </div>
+                <div class="form-item">
+                    <label for="password" class="require-field">Пароль</label>
+                    <input name="password" type="password" placeholder="Введите пароль">
+                    <div class="error-message">Не заполнено обязательное поле password!</div>
+                </div>
+                <div class="form-item">
+                    <label for="password_confirm" class="require-field">Подтвердите пароль</label>
+                    <input name="password_confirm" type="password" placeholder="Повторите пароль">
+                    <div class="error-message"></div>
+                </div>
                 <button class="auth_btn" type="button">Зарегистрироваться</button>
             </form>
             <a class="link_reg" href="auth.html">Войти</a>
