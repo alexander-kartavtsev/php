@@ -40,6 +40,7 @@ function getUserIdByToken(): ?int
 {
     $token = $_COOKIE[USER_AUTH_COOKIE_NAME] ?? '';
     if (empty($token)) {
+        logout();
         return null;
     }
 
