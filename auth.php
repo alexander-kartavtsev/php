@@ -8,6 +8,9 @@ if (!empty($_POST)) {
 
     $errors = auth($login, $password);
 }
+$errorClass = function ($fieldName) use ($errors) {
+    return isset($errors[$fieldName]) ? ' class="input-error"' : '';
+};
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,21 +24,31 @@ if (!empty($_POST)) {
         <div class="form_auth">
             <form action="<?=$_SERVER['PHP_SELF']?>" method="post">
                 <div class="form-item">
-                    <label for="login">Логин</label>
-                    <input name="login" type="text" placeholder="Введите логин" autocomplete="off">
+                    <label for="login" class="require-field">Логин</label>
+                    <input
+                            name="login"
+                            type="text"
+                            placeholder="Введите логин"
+                            autocomplete="on"
+                            <?= $errorClass('login') ?>
+                    >
+                    <div class="error-message"><?= $errors['login'] ?? '' ?></div>
                 </div>
                 <div class="form-item">
-                    <label for="password">Пароль</label>
-                    <input name="password" type="password" placeholder="Введите пароль" autocomplete="off">
+                    <label for="password" class="require-field">Пароль</label>
+                    <input
+                            name="password"
+                            type="password"
+                            placeholder="Введите пароль"
+                            autocomplete="on"
+                            <?= $errorClass('password') ?>
+                    >
+                    <div class="error-message"><?= $errors['password'] ?? '' ?></div>
+                    <div class="error-message"><?= $errors['other'] ?? '' ?></div>
                 </div>
                 <button class="auth_btn" type="submit">Войти</button>
             </form>
             <a class="link_reg" href="/registration.php">Зарегистрироваться</a>
-            <?php if (!empty($errors)) {
-                foreach ($errors as $error) {
-                    dump($error);
-                }
-            } ?>
         </div>
     </body>
 </html>

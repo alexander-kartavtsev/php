@@ -86,6 +86,7 @@ $errorClass = function ($fieldName) use ($errors) {
                             <?= $errorClass('password_confirm') ?>
                     >
                     <div class="error-message"><?= $errors['password_confirm'] ?? '' ?></div>
+                    <div class="error-message"><?= $errors['other'] ?? '' ?></div>
                 </div>
                 <button class="auth_btn" type="submit">Зарегистрироваться</button>
             </form>

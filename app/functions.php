@@ -62,10 +62,10 @@ function auth(string $login, string $password): array|null
     $errors = [];
 
     if (empty($login)) {
-        $errors[] = 'Не заполнено обязательное поле login!';
+        $errors['login'] = 'Не заполнено обязательное поле login!';
     }
     if (empty($password)) {
-        $errors[] = 'Не заполнено обязательное поле password!';
+        $errors['password'] = 'Не заполнено обязательное поле password!';
     }
 
     if (!empty($errors)) {
@@ -76,7 +76,7 @@ function auth(string $login, string $password): array|null
     $query->execute(['login' => $login]);
     $user = $query->fetch();
     if (empty($user)) {
-        $errors["exist"] = 'Пользователя с таким логином не существует';
+        $errors["login"] = 'Пользователя с таким логином не существует';
     } else {
         $userAuthOk = password_verify($password, $user['PASSWORD']);
         if ($userAuthOk) {
@@ -86,7 +86,7 @@ function auth(string $login, string $password): array|null
             header('Location: ' . $locationUrl);
             die;
         } else {
-            $errors[] = 'Неправильный пароль';
+            $errors['other'] = 'Неправильный логин или пароль';
         }
     }
     return $errors;
@@ -148,9 +148,7 @@ function registration(
             header('Location: /auth.php');
             die;
         } else {
-            if (isset($queryReg)) {
-                $errors["other"] = $queryReg->errorInfo();
-            }
+            $errors["other"] = $queryReg->errorInfo();
         }
     }
 
