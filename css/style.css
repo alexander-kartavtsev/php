@@ -95,7 +95,7 @@ label.require-field::after {
     border: 1px solid #f69090;
 }
 
-.form_auth .error-message {
+.form_auth .form-item .error-message {
     display: block;
     margin: 0 auto;
     width: 90%;
@@ -241,13 +241,25 @@ footer {
     margin: 0 auto;
 }
 
+.main_page .form-item {
+    margin: 0 auto 0.8rem auto;
+    height: 50px;
+}
+
+.main_page .form-item .error-message {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    font-size: x-small;
+    color: #f69090;
+}
+
 .main_page .form_main .main_data .label {
     margin-bottom: 5px;
 }
 
 .main_page .form_main .main_data input,
 .main_page .form_main .main_data select {
-    margin-bottom: 15px;
     height: 25px;
 }
 

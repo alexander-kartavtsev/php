@@ -10,21 +10,52 @@ $errors = [];
 if (!empty($_POST)) {
     $name  = $_POST['name'] == 'noname' ? '' : $_POST['name'];
     $photo = $_POST['photo'];
+    $password = $_POST['password'];
+    $password_confirm = $_POST['password_confirm'];
 
-    $query  = $pdo->prepare('UPDATE users SET `NAME` = :name, `PHOTO` = :photo WHERE `ID` = :id');
-    $result = $query->execute([
-        'name'  => $name,
-        'photo' => $photo,
-        'id'    => $user->getId(),
-    ]);
+    $sql_start = 'UPDATE users SET ';
+    $sql_data = '';
+    $sql_where = ' WHERE `ID` = :id';
+    $query_params = ['id' => $user->getId()];
 
-    if ($result) {
-        header('Location: /');
-        die;
-    } else {
-        $errors["query"] = $query->errorInfo();
+    if (!empty($name)) {
+        $sql_data .= '`NAME` = :name';
+        $query_params['name'] = $name;
+    }
+
+    if (!empty($photo)) {
+        $sql_data .= (!empty($sql_data) ? ', ' : '') . '`PHOTO` = :photo';
+        $query_params['photo'] = $photo;
+    }
+
+    if (!empty($password)) {
+        if (empty($password_confirm)) {
+            $errors['password_confirm'] = "Необходимо подтвердить пароль!";
+        } elseif ($password_confirm !== $password) {
+            $errors['password_confirm'] = "Пароли отличаются!";
+        } else {
+            $sql_data .= (!empty($sql_data) ? ', ' : '') . '`PASSWORD` = :password';
+            $query_params['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+    }
+
+    if (empty($errors)) {
+        $sql    = $sql_start . $sql_data . $sql_where;
+        $query  = $pdo->prepare($sql);
+        $result = $query->execute($query_params);
+
+        if ($result) {
+            header('Location: /');
+            die;
+        } else {
+            $errors["other"] = $query->errorInfo();
+        }
     }
 }
+$errorClass = function ($fieldName) use ($errors) {
+    return isset($errors[$fieldName]) ? ' class="input-error"' : '';
+};
+
 require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
 ?>
 <div class="page_content main_page">
@@ -34,18 +65,39 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
             <div class="main_data">
                 <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
                     <h2>Основные данные</h2>
-                    <div class="label"><label for="name">Имя</label></div>
-                    <input
-                            name="name"
-                            type="text"
-                            placeholder="Имя пользователя"
-                            value="<?= $user->getName() ?: 'noname' ?>"
-                            autocomplete="username"
-                    >
-                    <div class="label"><label for="password">Пароль</label></div>
-                    <input name="password" type="password" placeholder="Введите пароль" autocomplete="current-password">
-                    <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
-                    <input name="password_confirm" type="password" placeholder="Повторите пароль" autocomplete="off">
+                    <div class="form-item">
+                        <div class="label"><label for="name">Имя</label></div>
+                        <input
+                                name="name"
+                                type="text"
+                                placeholder="Имя пользователя"
+                                value="<?= $user->getName() ?: 'noname' ?>"
+                                autocomplete="username"
+                        >
+                    </div>
+                    <div class="form-item">
+                        <div class="label"><label for="password">Пароль</label></div>
+                        <input
+                                name="password"
+                                type="password"
+                                placeholder="Введите пароль"
+                                value="<?= $password ?? '' ?>"
+                                autocomplete="current-password"
+                        >
+                    </div>
+                    <div class="form-item">
+                        <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
+                        <input
+                                name="password_confirm"
+                                type="password"
+                                placeholder="Повторите пароль"
+                                value="<?= $password_confirm ?? '' ?>"
+                                autocomplete="off"
+                                <?= $errorClass("password_confirm")?>
+                        >
+                        <div class="error-message"><?= $errors['password_confirm'] ?? '' ?></div>
+                        <div class="error-message"><?= $errors['other'] ?? '' ?></div>
+                    </div>
                     <div class="label"><label for="photo">Фото</label></div>
                     <select name="photo">
                         <option value="" <?= $user->isSelectedPhoto() ? '' : 'selected' ?>>Выберите фото</option>
@@ -145,7 +197,6 @@ require $_SERVER['DOCUMENT_ROOT'] . "/layout/header.php";
     const additionalDataValue = document.getElementById("add_field_value");
     const additionalDataButtonAdd = document.getElementById("add_btn");
     const tableAddData = document.getElementById("table_add_data");
-    // const additionalDataButtonDelete = document.getElementsByClassName("additional_data_delete");
 
     additionalDataButtonAdd.onclick = function () {
         const data = {

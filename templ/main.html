@@ -42,12 +42,24 @@
                     <div class="main_data">
                         <form method="post" action="main.html">
                             <h2>Основные данные</h2>
-                            <div class="label"><label for="name">Имя</label></div>
-                            <input name="name" type="text" placeholder="Имя пользователя" value="Александр">
-                            <div class="label"><label for="password">Пароль</label></div>
-                            <input name="password" type="password" placeholder="Введите пароль">
-                            <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
-                            <input name="password_confirm" type="password" placeholder="Повторите пароль">
+                            <div class="form-item">
+                                <div class="label"><label for="name">Имя</label></div>
+                                <input name="name" type="text" placeholder="Имя пользователя" value="Александр">
+                            </div>
+                            <div class="form-item">
+                                <div class="label"><label for="password">Пароль</label></div>
+                                <input name="password" type="password" placeholder="Введите пароль">
+                            </div>
+                            <div class="form-item">
+                                <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
+                                <input
+                                        name="password_confirm"
+                                        type="password"
+                                        placeholder="Повторите пароль"
+                                        class="input-error"
+                                >
+                                <div class="error-message">Необходимо подтвердить пароль!</div>
+                            </div>
                             <div class="label"> <label for="photo">Фото</label>
                             </div>
                             <select name="photo">
