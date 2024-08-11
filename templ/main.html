@@ -48,24 +48,19 @@
                             <input name="password" type="password" placeholder="Введите пароль">
                             <div class="label"><label for="password_confirm">Подтвердите пароль</label></div>
                             <input name="password_confirm" type="password" placeholder="Повторите пароль">
-                            <div class="label">
-                                <label
-                                        for="photo"
-                                        class="custom_photo_upload"
-                                        id="custom_photo_upload"
-                                >
-                                    Добавить фото
-                                </label>
+                            <div class="label"> <label for="photo">Фото</label>
                             </div>
-                            <input name="photo" type="file" class="photo_upload" id="photo_upload">
-                            <span class="photo_link" id="photo_link">Файл не выбран</span>
+                            <select name="photo">
+                                <option value="" selected>Выберите фото</option>
+                                <option value="file_name">file_name</option>
+                            </select>
                             <button class="auth_btn" type="button">Сохранить</button>
                         </form>
                     </div>
                     <div class="additional_data">
                         <h2>Дополнительные данные</h2>
-                        <table class="tbl">
-                            <tr>
+                        <table class="tbl" id="table_add_data">
+                            <tr id="additional_data_row_0">
                                 <td>
                                     Телефон
                                 </td>
@@ -73,10 +68,10 @@
                                     +79281252141
                                 </td>
                                 <td>
-                                    <span id="additional_data_1" class="additional_data_delete">Удалить</span>
+                                    <span id="delete_1" class="additional_data_delete">Удалить</span>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="additional_data_row_1">
                                 <td>
                                     Дата рождения
                                 </td>
@@ -84,7 +79,7 @@
                                     29.07.1974
                                 </td>
                                 <td>
-                                    <span  id="additional_data_2" class="additional_data_delete">Удалить</span>
+                                    <span  id="delete_2" class="additional_data_delete">Удалить</span>
                                 </td>
                             </tr>
                         </table>
@@ -96,13 +91,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input name="field_name" type="text">
+                                    <input name="field_name" type="text" id="add_field_name">
                                 </td>
                                 <td>
-                                    <input name="field_value" type="text">
+                                    <input name="field_value" type="text" id="add_field_value">
                                 </td>
                                 <td>
-                                    <button class="additional_data_btn">Добавить</button>
+                                    <button class="additional_data_btn" id="add_btn">Добавить</button>
                                 </td>
                             </tr>
                         </table>
@@ -111,6 +106,21 @@
                 <div class="main_image">
                     <img src="images/person14-1024.png">
 <!--                    <img src="images/not_foto.png">-->
+                    <form method="post" action="" enctype="multipart/form-data">
+                        <input type="hidden" name="user_id" value="1">
+                        <div class="label">
+                            <label
+                                    for="photo"
+                                    class="custom_photo_upload"
+                                    id="custom_photo_upload"
+                            >
+                                Загрузить фото
+                            </label>
+                        </div>
+                        <input name="photo" type="file" class="photo_upload" id="photo_upload">
+                        <span class="photo_link" id="photo_link">Файл не выбран</span>
+                        <button type="submit" class="photo_upload_btn btn">Загрузить</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -128,6 +138,86 @@
             console.log(fileInput.files);
             fileLink.textContent = fileInput.files.length ? fileInput.files[0].name : 'Файл не выбран';
             fileLabel.textContent = (fileInput.files.length ? 'Изменить' : 'Добавить') + ' фото';
+        }
+
+        const additionalDataName = document.getElementById("add_field_name");
+        const additionalDataValue = document.getElementById("add_field_value");
+        const additionalDataButtonAdd = document.getElementById("add_btn");
+        const tableAddData = document.getElementById("table_add_data");
+        let dataCount = document.getElementsByClassName("additional_data_delete").length;
+
+        additionalDataButtonAdd.onclick = function () {
+            const data = {
+                'name': additionalDataName.value,
+                'value': additionalDataValue.value,
+                'user_id': 1
+            };
+
+
+            tableAddData.appendChild(getTableRow(dataCount + 1, data['name'], data['value']));
+            additionalDataName.value = '';
+            additionalDataValue.value = '';
+            dataCount++;
+            // ajax('/app/ajax/addAdditionalData.php', data, function (result) {
+            //     tableAddData.appendChild(getTableRow(result.data.length - 1, data['name'], data['value']));
+            //     additionalDataName.value = '';
+            //     additionalDataValue.value = '';
+            // });
+        }
+
+        tableAddData.onclick = function (event) {
+            let btn_del = event.target.closest('td>span.additional_data_delete');
+            if (!btn_del) return;
+            if (!tableAddData.contains(btn_del)) return;
+
+            const btn_id = event.target.id;
+            const id = btn_id.substring(btn_id.indexOf('_') + 1);
+            const data = {
+                'id': id,
+                'user_id': 1
+        };
+            const row = document.getElementById('additional_data_row_' + id);
+            row.remove();
+            dataCount--;
+            // ajax('/app/ajax/delAdditionalData.php', data, function (result) {
+            //     const row = document.getElementById('additional_data_row_' + id);
+            //     row.remove();
+            // });
+        }
+
+        async function ajax(url, data, fn = null) {
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify(data)
+            });
+
+            let result = await response.json();
+            if (result.success && fn) {
+                fn(result);
+            }
+        }
+
+        function getTableRow(id, name, value) {
+            const tableRow = document.createElement('tr');
+            tableRow.id = 'additional_data_row_' + id;
+            const tableColumnOne = document.createElement('td');
+            const tableColumnTwo = document.createElement('td');
+            const tableColumnThree = document.createElement('td');
+            tableColumnOne.innerText = name;
+            tableRow.appendChild(tableColumnOne);
+            tableColumnTwo.innerText = value;
+            tableRow.appendChild(tableColumnTwo);
+            const span = document.createElement('span');
+            span.classList.add('additional_data_delete');
+            span.id = 'delete_' + id;
+            span.innerText = 'Удалить';
+            tableColumnThree.appendChild(span);
+            tableRow.appendChild(tableColumnThree);
+
+            return tableRow;
         }
     </script>
     </body>
