@@ -20,10 +20,14 @@ if (!empty($_POST)) {
     <body>
         <div class="form_auth">
             <form action="<?=$_SERVER['PHP_SELF']?>" method="post">
-                <label for="login">Логин</label>
-                <input name="login" type="text" placeholder="Введите логин">
-                <label for="password">Пароль</label>
-                <input name="password" type="password" placeholder="Введите пароль">
+                <div class="form-item">
+                    <label for="login">Логин</label>
+                    <input name="login" type="text" placeholder="Введите логин" autocomplete="off">
+                </div>
+                <div class="form-item">
+                    <label for="password">Пароль</label>
+                    <input name="password" type="password" placeholder="Введите пароль" autocomplete="off">
+                </div>
                 <button class="auth_btn" type="submit">Войти</button>
             </form>
             <a class="link_reg" href="/registration.php">Зарегистрироваться</a>

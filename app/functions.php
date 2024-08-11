@@ -102,6 +102,61 @@ function logout(): void
     setcookie(USER_AUTH_COOKIE_NAME, 0, time() - 1);
 }
 
+function registration(
+    string $name = '',
+    string $login = '',
+    string $password = '',
+    string $password_confirm = '',
+    array $requiredFields = []
+) {
+    global $pdo;
+
+    $errors = [];
+
+    if ($password !== $password_confirm) {
+        $errors['password_confirm'] = "Ошибка при подтверждении. Пароли не совпадают!";
+    }
+
+    $requireFieldError = 'Не заполнено обязательное поле';
+    foreach ($requiredFields as $requiredField) {
+        if (empty($$requiredField)) {
+            $errors[$requiredField] = sprintf('%s %s!', $requireFieldError, $requiredField);
+        }
+    }
+
+    if (!empty($errors)) {
+        return ['success' => false, 'errors' => $errors];
+    }
+
+    $query = $pdo->prepare('SELECT `ID` FROM users WHERE `LOGIN` = :login');
+    $query->execute(['login' => $login]);
+    $user = $query->fetch();
+
+    if (!empty($user)) {
+        $errors['login'] = 'Пользователь с таким логином уже существует';
+    } else {
+        $queryReg = $pdo->prepare(
+            'INSERT INTO users (`NAME`, `LOGIN`, `PASSWORD`) VALUES (:name, :login, :password)'
+        );
+        $result   = $queryReg->execute([
+            'name'     => $name,
+            'login'    => $login,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+        ]);
+
+        if ($result) {
+            header('Location: /auth.php');
+            die;
+        } else {
+            if (isset($queryReg)) {
+                $errors["other"] = $queryReg->errorInfo();
+            }
+        }
+    }
+
+    return ['success' => false, 'errors' => $errors];
+}
+
 function autoloader($class): void
 {
     require_once $_SERVER['DOCUMENT_ROOT'] . "/app/classes/"  . $class . ".php";

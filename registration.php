@@ -1,5 +1,14 @@
 <?php
 
+$requiredFields = [
+    'login',
+    'password',
+    'password_confirm',
+];
+$reqFieldClass = function ($fieldName) use ($requiredFields) {
+    return in_array($fieldName, $requiredFields) ? ' class="require-field"' : '';
+};
+
 require $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
 /** @var PDO $pdo */
 $errors = [];
@@ -9,36 +18,14 @@ if (!empty($_POST)) {
     $password     = $_POST['password'];
     $passwordConf = $_POST['password_confirm'];
 
-    $query = $pdo->prepare('SELECT `ID` FROM users WHERE `LOGIN` = :login');
-    $query->execute(['login' => $login]);
-    $user = $query->fetch();
-    if (!empty($user)) {
-        $errors["exist"] = 'Пользователь с таким логином уже существует';
-    } else {
-        $result = false;
-        if ($password !== $passwordConf) {
-            $errors[] = "Ошибка при подтверждении. Пароли не совпадают!";
-        } else {
-            $queryReg  = $pdo->prepare(
-                'INSERT INTO users (`NAME`, `LOGIN`, `PASSWORD`) VALUES (:name, :login, :password)'
-            );
-            $result = $queryReg->execute([
-                'name'     => $name,
-                'login'    => $login,
-                'password' => password_hash($password, PASSWORD_DEFAULT),
-            ]);
-        }
-
-        if ($result) {
-            header('Location: /auth.php');
-            die;
-        } else {
-            if (isset($queryReg)) {
-                $errors["query"] = $queryReg->errorInfo();
-            }
-        }
+    $result = registration($name, $login, $password, $passwordConf, $requiredFields);
+    if (!$result['success']) {
+        $errors = $result['errors'];
     }
 }
+$errorClass = function ($fieldName) use ($errors) {
+    return isset($errors[$fieldName]) ? ' class="input-error"' : '';
+};
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,22 +38,58 @@ if (!empty($_POST)) {
     <body>
         <div class="form_auth">
             <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
-                <label for="name">Имя</label>
-                <input name="name" type="text" placeholder="Введите имя" value="<?=$name??''?>">
-                <label for="login">Логин</label>
-                <input name="login" type="text" placeholder="Введите логин" value="<?=$login??''?>">
-                <label for="password">Пароль</label>
-                <input name="password" type="password" placeholder="Введите пароль" value="<?=$password??''?>">
-                <label for="password_confirm">Подтвердите пароль</label>
-                <input name="password_confirm" type="password" placeholder="Повторите пароль" value="<?=$passwordConf??''?>">
+                <div class="form-item">
+                    <label for="name"<?= $reqFieldClass('name')?>>
+                        Имя
+                    </label>
+                    <input
+                            name="name"
+                            type="text"
+                            placeholder="Введите имя"
+                            value="<?= $name ?? '' ?>"
+                            <?= $errorClass('name') ?>
+                    >
+                    <div class="error-message"><?= $errors['name'] ?? '' ?></div>
+                    </div>
+                <div class="form-item">
+                    <label for="login"<?= $reqFieldClass('login')?>>Логин</label>
+                    <input
+                            name="login"
+                            type="text"
+                            placeholder="Введите логин"
+                            value="<?= $login ?? '' ?>"
+                            <?= $errorClass('login') ?>
+                    >
+                    <div class="error-message"><?= $errors['login'] ?? '' ?></div>
+                </div>
+                <div class="form-item">
+                    <label for="password"<?= $reqFieldClass('password')?>>Пароль</label>
+                    <input
+                            name="password"
+                            type="password"
+                            placeholder="Введите пароль"
+                            value="<?= $password ?? '' ?>"
+                            autocomplete="new-password"
+                            <?= $errorClass('password') ?>
+                    >
+                    <div class="error-message"><?= $errors['password'] ?? '' ?></div>
+                </div>
+                <div class="form-item">
+                    <label
+                            for="password_confirm"<?= $reqFieldClass('password_confirm')?>
+                    >Подтвердите пароль</label>
+                    <input
+                            name="password_confirm"
+                            type="password"
+                            placeholder="Повторите пароль"
+                            value="<?= $passwordConf ?? '' ?>"
+                            <?= $errorClass('password_confirm') ?>
+                    >
+                    <div class="error-message"><?= $errors['password_confirm'] ?? '' ?></div>
+                </div>
                 <button class="auth_btn" type="submit">Зарегистрироваться</button>
             </form>
             <a class="link_reg" href="/auth.php">Войти</a>
-            <?php if (!empty($errors)) {
-                foreach ($errors as $error) {
-                    dump($error);
-                }
-            } ?>
         </div>
     </body>
 </html>

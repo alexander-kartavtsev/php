@@ -22,6 +22,7 @@ button {
 
 
 /* auth */
+/* registration */
 
 .form_auth {
     width: 30%;
@@ -45,9 +46,14 @@ button {
 }
 
 .form_auth input {
-    margin: 0 auto 0.8rem auto;
+    margin: 0 auto;
     font-size: 14px;
     line-height: 18px;
+}
+
+.form_auth .form-item {
+    margin: 0 auto 0.8rem auto;
+    height: 70px;
 }
 
 .form_auth label,
@@ -79,6 +85,24 @@ button {
     color: #a7aaa9;
     font-weight: bold;
     text-decoration: none;
+}
+
+label.require-field::after {
+    content: '*';
+    font-size: small;
+    color: #f69090;
+}
+
+.input-error {
+    border: 1px solid #f69090;
+}
+
+.form_auth .error-message {
+    display: block;
+    margin: 0 auto;
+    width: 90%;
+    font-size: x-small;
+    color: #f69090;
 }
 
 /* Header */
