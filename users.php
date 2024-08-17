@@ -7,10 +7,10 @@ require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
       <h1>Данные пользователей</h1>
       <table class="users_data">
         <tr>
-          <th>login</th>
-          <th>Имя</th>
-          <th>Количество посещений</th>
-          <th>Число</th>
+          <th class="login">login</th>
+          <th class="name">Имя пользователя</th>
+          <th class="number">Количество посещений</th>
+          <th class="number">Число</th>
         </tr>
           <?php foreach (Users::getAll() as $user) { ?>
         <tr<?= $user->current ? ' class="current"' : '' ?>>

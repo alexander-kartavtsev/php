@@ -435,3 +435,7 @@ footer {
     color: #333333;
     font-weight: bolder;
 }
+
+.users_page table .number {
+    width: 20%;
+}
