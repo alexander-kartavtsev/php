@@ -3,10 +3,13 @@
 const NEED_AUTH = true;
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
 /** @var User $user */
+$current = (int)($_GET['pagen'] ?? 1);
+$max = 3;
+$pagen = new Pagination($max, $current, $_SERVER['DOCUMENT_URI']);
 ?>
     <div class="page_content users_page">
         <h1>Данные пользователей</h1>
-        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/pagen.php'?>
+        <?php $pagen->show();?>
         <table class="users_data">
             <tr>
                 <th class="login">login</th>
@@ -25,7 +28,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
             <?php
             } ?>
         </table>
-        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/pagen.php'?>
+        <?php $pagen->show();?>
     </div>
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php';
