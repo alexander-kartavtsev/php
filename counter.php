@@ -2,9 +2,10 @@
 const NEED_AUTH = true;
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
 $counter = new Counter();
+$user = new CurrentUser();
 ?>
 <div class="page_content counter_page">
-      <h1>Счетчик пользователя login</h1>
+      <h1>Счетчик пользователя <?=$user->getName()?>(<?=$user->getLogin()?>)</h1>
       <div class="counter_wrapper">
         <div class="counter_auth">
           <h2>Количество посещений</h2>

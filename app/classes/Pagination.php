@@ -72,6 +72,8 @@ class Pagination
 
     private function isValid(): bool
     {
+        $isValid = true;
+
         if ($this->currentPage > $this->pageCount) {
             $this->currentPage = $this->pageCount;
         }
@@ -80,9 +82,13 @@ class Pagination
             $this->currentPage = 1;
         }
 
+        if ($this->pageCount <= 1) {
+            $isValid = false;
+        }
+
         $this->init();
 
-        return true;
+        return $isValid;
     }
 
     private function init(): void
