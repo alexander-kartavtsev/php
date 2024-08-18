@@ -5,13 +5,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/app/init.php';
 $currentUri  = $_SERVER["REQUEST_URI"];
 $currentUser = new CurrentUser();
 $arMenu      = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
+$page = new Page();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/style.css<?= '?' . time()?>">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Main</title>
 </head>
 <body>

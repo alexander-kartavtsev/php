@@ -2,23 +2,30 @@
 
 const NEED_AUTH = true;
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
-/** @var User $user */
+/**
+ * @var User $user
+ * @var Page $page
+ */
 $current = (int)($_GET['pagen'] ?? 1);
 $orderBy = (string)($_GET['by'] ?? 'id');
 $orderTo = (string)($_GET['to'] ?? 'asc');
 $usersObj = new Users();
 $users = $usersObj
-    ->setCountOnPage(4)
+    ->setCountOnPage(5)
     ->setPagen($current)
     ->setOrderBy($orderBy)
     ->setOrderDesc($orderTo === 'desc')
     ->getUsers();
-$pagen = new Pagination($usersObj->getPageCount(), $current, $_SERVER['REQUEST_URI']);
+$pagination = new Pagination($usersObj->getPageCount(), $current, $_SERVER['REQUEST_URI']);
+$sort = (new Sort('users'))
+    ->setOrderBy($orderBy)
+    ->setOrderTo($orderTo);
+$page->addPageScript($sort->getScript());
 ?>
     <div class="page_content users_page">
         <h1>Данные пользователей</h1>
-        <?php $pagen->show();?>
-        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sort.php'?>
+        <?php $pagination->show() ?>
+        <?php $sort->show() ?>
         <table class="users_data">
             <tr>
                 <th class="login">login</th>
@@ -37,7 +44,7 @@ $pagen = new Pagination($usersObj->getPageCount(), $current, $_SERVER['REQUEST_U
             <?php
             } ?>
         </table>
-        <?php $pagen->show();?>
+        <?php $pagination->show() ?>
     </div>
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php';

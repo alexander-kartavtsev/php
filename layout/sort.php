@@ -1,21 +1,8 @@
 <?php
 
 /**
- * @var string $orderBy
- * @var string $orderTo
+ * @var Sort $this
  */
-$arBy = [
-    ['value' => 'id', 'name' => 'По-умолчанию'],
-    ['value' => 'login', 'name' => 'По логину'],
-    ['value' => 'name', 'name' => 'По имени'],
-    ['value' => 'visits', 'name' => 'По визитам'],
-    ['value' => 'number', 'name' => 'По числу'],
-];
-
-$arTo = [
-    ['value' => 'asc', 'name' => 'По возрастанию'],
-    ['value' => 'desc', 'name' => 'По убыванию'],
-];
 ?>
 <div class="sort">
     <div class="sort_box">
@@ -23,10 +10,10 @@ $arTo = [
     </div>
     <div class="sort_box by">
         <select class="sort_box_select" id="sort_by">
-            <?php foreach ($arBy as $by) { ?>
+            <?php foreach ($this->arOrderBy as $by) { ?>
                 <option
                     value="<?= $by['value'] ?>"
-                    <?= $orderBy === $by['value'] ? ' selected' : '' ?>
+                    <?= $this->orderBy === $by['value'] ? ' selected' : '' ?>
                 >
                     <?= $by['name'] ?>
                 </option>
@@ -35,10 +22,10 @@ $arTo = [
     </div>
     <div class="sort_box to">
         <select class="sort_box_select" id="sort_to">
-            <?php foreach ($arTo as $to) { ?>
+            <?php foreach ($this->arOrderTo as $to) { ?>
                 <option
                     value="<?= $to['value'] ?>"
-                    <?= $orderTo === $to['value'] ? ' selected' : '' ?>
+                    <?= $this->orderTo === $to['value'] ? ' selected' : '' ?>
                 >
                     <?= $to['name'] ?>
                 </option>
@@ -46,21 +33,3 @@ $arTo = [
         </select>
     </div>
 </div>
-<script>
-    const sortBy = document.getElementById('sort_by');
-    const sortTo = document.getElementById('sort_to');
-
-    sortBy.onchange = function () {
-        window.location.replace(getQueryString('by', this.value));
-    }
-
-    sortTo.onchange = function () {
-        window.location.replace(getQueryString('to', this.value));
-    }
-
-    function getQueryString(key, value) {
-        const params = new URLSearchParams(document.location.search);
-        params.set(key, value);
-        return '?' + params.toString();
-    }
-</script>
