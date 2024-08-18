@@ -4,22 +4,21 @@ const NEED_AUTH = true;
 require $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php';
 /** @var User $user */
 $current = (int)($_GET['pagen'] ?? 1);
+$orderBy = (string)($_GET['by'] ?? 'id');
+$orderTo = (string)($_GET['to'] ?? 'asc');
 $usersObj = new Users();
 $users = $usersObj
     ->setCountOnPage(5)
     ->setPagen($current)
-    ->setOrderBy('number')
-    ->setOrderDesc()
+    ->setOrderBy($orderBy)
+    ->setOrderDesc($orderTo === 'desc')
     ->getUsers();
 $pagen = new Pagination($usersObj->getPageCount(), $current, $_SERVER['REQUEST_URI']);
 ?>
     <div class="page_content users_page">
         <h1>Данные пользователей</h1>
         <?php $pagen->show();?>
-
-
-
-
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sort.php'?>
         <table class="users_data">
             <tr>
                 <th class="login">login</th>

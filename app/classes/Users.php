@@ -35,9 +35,11 @@ class Users
         return $this;
     }
 
-    public function setOrderDesc(): self
+    public function setOrderDesc(bool $needSet = false): self
     {
-        $this->orderTo = 'desc';
+        if ($needSet) {
+            $this->orderTo = 'desc';
+        }
         return $this;
     }
 
