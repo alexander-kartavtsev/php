@@ -8,7 +8,7 @@ $orderBy = (string)($_GET['by'] ?? 'id');
 $orderTo = (string)($_GET['to'] ?? 'asc');
 $usersObj = new Users();
 $users = $usersObj
-    ->setCountOnPage(5)
+    ->setCountOnPage(4)
     ->setPagen($current)
     ->setOrderBy($orderBy)
     ->setOrderDesc($orderTo === 'desc')

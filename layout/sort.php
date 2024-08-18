@@ -5,11 +5,11 @@
  * @var string $orderTo
  */
 $arBy = [
-    ['value' => 'id', 'name' => '-'],
-    ['value' => 'login', 'name' => 'Логин'],
-    ['value' => 'name', 'name' => 'Имя'],
-    ['value' => 'visits', 'name' => 'Визиты'],
-    ['value' => 'number', 'name' => 'Число'],
+    ['value' => 'id', 'name' => 'По-умолчанию'],
+    ['value' => 'login', 'name' => 'По логину'],
+    ['value' => 'name', 'name' => 'По имени'],
+    ['value' => 'visits', 'name' => 'По визитам'],
+    ['value' => 'number', 'name' => 'По числу'],
 ];
 
 $arTo = [
@@ -19,6 +19,9 @@ $arTo = [
 ?>
 <div class="sort">
     <div class="sort_box">
+        Сортировка:
+    </div>
+    <div class="sort_box by">
         <select class="sort_box_select" id="sort_by">
             <?php foreach ($arBy as $by) { ?>
                 <option
@@ -30,7 +33,7 @@ $arTo = [
             <?php } ?>
         </select>
     </div>
-    <div class="sort_box">
+    <div class="sort_box to">
         <select class="sort_box_select" id="sort_to">
             <?php foreach ($arTo as $to) { ?>
                 <option
@@ -47,11 +50,11 @@ $arTo = [
     const sortBy = document.getElementById('sort_by');
     const sortTo = document.getElementById('sort_to');
 
-    sortBy.onclick = sortBy.onchange = function () {
+    sortBy.onchange = function () {
         window.location.replace(getQueryString('by', this.value));
     }
 
-    sortTo.onclick = sortTo.onchange = function () {
+    sortTo.onchange = function () {
         window.location.replace(getQueryString('to', this.value));
     }
 

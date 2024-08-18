@@ -11,7 +11,7 @@ $arMenu      = include $_SERVER['DOCUMENT_ROOT'] . '/menu/main.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css<?= '?' . time()?>">
     <title>Main</title>
 </head>
 <body>

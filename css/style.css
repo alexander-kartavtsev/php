@@ -482,3 +482,39 @@ footer {
     background-color: #777777;
     color: #cccccc;
 }
+
+.sort {
+    display: flex;
+    margin: 1em auto;
+    justify-content: end;
+}
+
+.sort .sort_box {
+    font-size: 16px;
+    color: #999999;
+    font-weight: bold;
+    padding: 10px 0 0 10px;
+}
+
+.sort .sort_box .sort_box_select {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    border: none;
+    background-color: #fff;
+    appearance: none;
+    text-align: end;
+}
+
+.sort .sort_box .sort_box_select:focus {
+    border: none;
+}
+
+
+.sort .sort_box.to {
+    margin-left: 10px;
+}
+
+.users_page .sort {
+    width: 80%;
+}
