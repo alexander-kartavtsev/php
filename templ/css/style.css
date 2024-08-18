@@ -293,7 +293,7 @@ footer {
     width: 70%;
 }
 
-.main_page .form_main .additional_data .tbl{
+.main_page .form_main .additional_data .tbl {
     border-spacing: 0;
     margin-bottom: 15px;
     border-bottom: 1px solid #777777;
@@ -302,7 +302,7 @@ footer {
     font-size: 16px;
 }
 
-.main_page .form_main .additional_data .add{
+.main_page .form_main .additional_data .add {
     border-spacing: 0;
     margin-bottom: 15px;
     margin-left: 15px;
@@ -310,18 +310,18 @@ footer {
     border: none;
 }
 
-.main_page .form_main .additional_data .add input{
+.main_page .form_main .additional_data .add input {
     width: 80%;
     padding: 10px;
 }
 
-.main_page .form_main .additional_data .tbl td{
+.main_page .form_main .additional_data .tbl td {
     border-right: 1px solid #777777;
     border-top: 1px solid #777777;
     padding: 10px;
 }
 
-.main_page .form_main .additional_data .tbl td:first-child{
+.main_page .form_main .additional_data .tbl td:first-child {
     border-left: 1px solid #777777;
 }
 
@@ -434,4 +434,51 @@ footer {
 .users_page .users_data .current td {
     color: #333333;
     font-weight: bolder;
+}
+
+.users_page table .number {
+    width: 20%;
+}
+
+/* pagen (Пагинация) */
+
+.pagen {
+    display: flex;
+    width: 80%;
+    margin: 2em auto;
+}
+
+.pagen .pagen_box {
+    border: 1px solid #aaaaaa;
+    background-color: #cccccc;
+    color: #888888;
+    padding: 10px;
+    min-width: 15px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.pagen .pagen_box.pagen_box_current {
+    border: 1px solid #888888;
+    background-color: #aaaaaa;
+    color: #cccccc;
+}
+
+.pagen>div {
+    margin-left: 5px;
+}
+
+.pagen>div:first-child {
+    margin-left: 0;
+}
+
+.pagen a {
+    text-decoration: none;
+    font-weight: bolder;
+    color: #777777;
+}
+
+.pagen a .pagen_box:hover {
+    background-color: #777777;
+    color: #cccccc;
 }
