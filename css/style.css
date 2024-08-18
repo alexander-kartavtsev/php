@@ -483,6 +483,8 @@ footer {
     color: #cccccc;
 }
 
+/* Сортировка */
+
 .sort {
     display: flex;
     margin: 1em auto;

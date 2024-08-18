@@ -39,6 +39,26 @@
     </header>
     <div class="page_content users_page">
       <h1>Данные пользователей</h1>
+      <div class="sort">
+        <div class="sort_box">
+          Сортировка:
+        </div>
+        <div class="sort_box by">
+          <select class="sort_box_select" id="sort_by">
+            <option value="id" selected>По-умолчанию</option>
+            <option value="login">По логину</option>
+            <option value="name">По имени</option>
+            <option value="visits">По визитам</option>
+            <option value="number">По числу</option>
+          </select>
+        </div>
+        <div class="sort_box to">
+          <select class="sort_box_select" id="sort_to">
+            <option value="asc" selected>По возрастанию</option>
+            <option value="desc">По убыванию</option>
+          </select>
+        </div>
+      </div>
       <table class="users_data">
         <tr>
           <th class="login">login</th>
@@ -98,5 +118,23 @@
     <footer>
 
     </footer>
+    <script>
+      const sortBy = document.getElementById('sort_by');
+      const sortTo = document.getElementById('sort_to');
+
+      sortBy.onchange = function () {
+        window.location.replace(getQueryString('by', this.value));
+      }
+
+      sortTo.onchange = function () {
+        window.location.replace(getQueryString('to', this.value));
+      }
+
+      function getQueryString(key, value) {
+        const params = new URLSearchParams(document.location.search);
+        params.set(key, value);
+        return '?' + params.toString();
+      }
+    </script>
   </body>
 </html>

@@ -59,21 +59,8 @@ $arTo = [
     }
 
     function getQueryString(key, value) {
-        let queryString = '<?=$_SERVER['QUERY_STRING']?>';
-        const arQueryString = queryString.split('&');
-        let arQuery = {};
-        for (let i = 0; i < arQueryString.length; i++) {
-            const arQueryItem = arQueryString[i].split('=');
-            if (arQueryItem[0].length && arQueryItem[1].length) {
-                arQuery[arQueryItem[0]] = arQueryItem[1];
-            }
-        }
-        arQuery[key] = value;
-        queryString = '';
-        for (let key in arQuery) {
-            const queryItem = key + '=' + arQuery[key];
-            queryString += queryString.length === 0 ? queryItem : '&' + queryItem;
-        }
-        return '?' + queryString;
+        const params = new URLSearchParams(document.location.search);
+        params.set(key, value);
+        return '?' + params.toString();
     }
 </script>
