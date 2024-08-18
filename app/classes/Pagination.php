@@ -9,13 +9,16 @@ class Pagination
     private int $lastShow;
     private ?int $nextPage = null;
     private ?int $prevPage = null;
+    private string $pageUrl;
+    private array $query = [];
 
     public function __construct(
         private readonly int $pageCount,
         private int $currentPage,
-        private readonly string $pageUrl
+        private readonly string $url
     ) {
         $this->init();
+        $this->initPageUrl();
     }
 
     public function isFirstPage(): bool
@@ -30,7 +33,8 @@ class Pagination
 
     public function getPageUrl(): string
     {
-        return $this->pageUrl;
+        unset($this->query['pagen']);
+        return $this->pageUrl . $this->getQueryString();
     }
 
     public function getFirstShow(): int
@@ -68,6 +72,29 @@ class Pagination
         if ($this->isValid()) {
             include $_SERVER['DOCUMENT_ROOT'] . '/layout/pagination.php';
         }
+    }
+
+    public function getPrevPageLink(): string
+    {
+        $link = $this->prevPage > 1 ? $this->genLink($this->prevPage) : $this->getPageUrl();
+        return $link;
+    }
+
+    public function getNextPageLink(): string
+    {
+        return $this->genLink($this->nextPage);
+    }
+
+    public function getPageLink(int $page): string
+    {
+        $link = $page > 1 ? $this->genLink($page) : $this->getPageUrl();
+        return $link;
+    }
+
+    private function genLink(int $page)
+    {
+        $this->query['pagen'] = $page;
+        return $this->getQueryString();
     }
 
     private function isValid(): bool
@@ -141,5 +168,19 @@ class Pagination
         if ($this->currentPage > 1) {
             $this->prevPage = $this->currentPage - 1;
         }
+    }
+
+    private function initPageUrl(): void
+    {
+        $arUrl = parse_url($this->url);
+        $this->pageUrl = $arUrl['path'];
+        $queryString = $arUrl['query'] ?? '';
+        parse_str($queryString, $this->query);
+        unset($this->query['pagen']);
+    }
+
+    private function getQueryString()
+    {
+        return !empty($this->query) ? '?' . http_build_query($this->query) : '';
     }
 }

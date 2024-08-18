@@ -11,11 +11,15 @@ $users = $usersObj
     ->setOrderBy('number')
     ->setOrderDesc()
     ->getUsers();
-$pagen = new Pagination($usersObj->getPageCount(), $current, $_SERVER['DOCUMENT_URI']);
+$pagen = new Pagination($usersObj->getPageCount(), $current, $_SERVER['REQUEST_URI']);
 ?>
     <div class="page_content users_page">
         <h1>Данные пользователей</h1>
         <?php $pagen->show();?>
+
+
+
+
         <table class="users_data">
             <tr>
                 <th class="login">login</th>

@@ -9,7 +9,7 @@
         <?php if ($this->getPageCount() > 1) { ?>
             <div>
                 <?php if (!$this->isFirstPage()) { ?>
-                    <a href="<?= $this->getPrevPage() > 1 ? '?pagen=' . $this->getPrevPage() : $this->getPageUrl() ?>">
+                    <a href="<?= $this->getPrevPageLink() ?>">
                 <?php } ?>
                     <div class="pagen_box<?= $this->isFirstPage() ? ' pagen_box_current' : ''?>">
                         <<
@@ -22,7 +22,7 @@
         <?php for ($page = $this->getFirstShow(); $page <= $this->getLastShow(); $page++) { ?>
             <div>
                 <?php if (!$this->isCurrentPage($page)) { ?>
-                    <a href="<?= $page > 1 ? '?pagen=' . $page : $this->getPageUrl()?>">
+                    <a href="<?= $this->getPageLink($page)?>">
                 <?php } ?>
                     <div class="pagen_box<?= $this->isCurrentPage($page) ? ' pagen_box_current' : ''?>">
                         <?= $page ?>
@@ -36,7 +36,7 @@
         <?php if ($this->getPageCount() > 1) { ?>
             <div>
                 <?php if (!$this->isLastPage()) { ?>
-                    <a href="?pagen=<?= $this->getNextPage() ?>">
+                    <a href="<?= $this->getNextPageLink() ?>">
                 <?php } ?>
                     <div class="pagen_box<?= $this->isLastPage() ? ' pagen_box_current' : ''?>">
                         >>
