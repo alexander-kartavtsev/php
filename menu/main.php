@@ -1,6 +1,6 @@
 <?php
 return [
-    'main'    => ['title' => 'Главная', 'uri' => '/'],
-    'users'   => ['title' => 'Пользователи', 'uri' => '/users.php'],
-    'counter' => ['title' => 'Счетчик', 'uri' => '/counter.php'],
+    '/'    => ['title' => 'Главная', 'uri' => '/'],
+    '/users.php'   => ['title' => 'Пользователи', 'uri' => '/users.php'],
+    '/counter.php' => ['title' => 'Счетчик', 'uri' => '/counter.php'],
 ];
